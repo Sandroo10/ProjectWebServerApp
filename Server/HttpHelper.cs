@@ -34,7 +34,6 @@ namespace Server
             {
                 errorHtml = File.ReadAllText(errorPagePath);
 
-                // Replace either placeholders OR default text
                 if (errorHtml.Contains("__ERROR_TITLE__") && errorHtml.Contains("__ERROR_DESCRIPTION__"))
                 {
                     errorHtml = errorHtml
@@ -50,7 +49,6 @@ namespace Server
             }
             else
             {
-                // Fallback HTML if no error.html exists
                 errorHtml = $"<html><body><h1>{code} {message}</h1><p>An error occurred: {message}</p></body></html>";
             }
 
@@ -61,6 +59,14 @@ namespace Server
             stream.Write(body, 0, body.Length);
             stream.Flush();
         }
+        public static void LogRequest(string requestLine)
+        {
+            string logLine = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {requestLine}";
+            File.AppendAllText("request_log.txt", logLine + Environment.NewLine);
+            Console.WriteLine("Log written to: " + Path.GetFullPath("request_log.txt")); // this shows where my log is saved, the exact path.
+                                                                                         // which is usually under what you run so webserverapp directory.
+        }
+
 
 
     }

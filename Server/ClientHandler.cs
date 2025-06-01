@@ -28,6 +28,9 @@ namespace Server
 
             Console.WriteLine($"[Request] {requestLine}");
 
+            HttpHelper.LogRequest(requestLine);
+
+
             string[] tokens = requestLine.Split(' ');
             if (tokens.Length < 2 || tokens[0] != "GET")
             {
