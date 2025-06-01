@@ -26,13 +26,21 @@ namespace Server
             {
                 var client = listener.AcceptTcpClient();
                 Console.WriteLine("[Server] Client connected.");
-                Thread thread = new Thread(() =>
+
+                ThreadPool.QueueUserWorkItem(_ =>
                 {
-                    var handler = new ClientHandler(client, _rootFolder);
-                    handler.Process();
+                    try
+                    {
+                        var handler = new ClientHandler(client, _rootFolder);
+                        handler.Process();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"[Error] {ex.Message}");
+                    }
                 });
-                thread.Start();
             }
+
         }
     }
 }
